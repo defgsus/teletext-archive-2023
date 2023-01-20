@@ -28,13 +28,13 @@ def update_timestamps():
         return
 
     existing_timestamps = TIMESTAMPS_FILENAME.read_text().splitlines()
-    latest_timestamp = json.loads(existing_timestamps[-1])
+    latest_timestamp = json.loads(existing_timestamps[-1]) if existing_timestamps else None
 
     with open(str(TIMESTAMPS_FILENAME), "a") as fp:
 
         for timestamp, hash in sorted(
                 TeletextIterator().iter_commit_timestamps(
-                    after_hash=latest_timestamp["hash"]
+                    after_hash=latest_timestamp["hash"] if latest_timestamp else None
                 ),
                 key=lambda th: th[0]
         ):
